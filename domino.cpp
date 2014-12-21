@@ -41,16 +41,20 @@ int calculate_foldings(int x, int n_stamps){
 	std::vector<bool> occupied(n_stamps, false);						// keep track of the occupied fields
 	std::vector<int> board(n_stamps, -1);								// map: stone_nr -> element in "occupied"
 	
-	// we start with stone 0 (stone_nr==0) at "x"
-	board[0] = x;
+	// we start with stone 0 (stone_nr==0) at "0" and stone 1 (stone_nr==0) at "x"
+	board[0] = 0;
+	occupied[0] = true;	
+	board[1] = x;
 	occupied[x] = true;
 	
-	unsigned int stone_nr=1;						// as 0 is already on the board, we start with nr 1
+	sealed_intervals[1] = std::make_pair(board[0], board[1]);
 	
-	board[stone_nr] = 0;							// we will try to set the first stone to 0
+	unsigned int stone_nr=2;						// as 0 & 1 is already on the board, we start with nr 2
+	
+	board[stone_nr] = 1;							// we will try to set the first stone to 1 since 0 is always occupied
 	
 	// we calculate all foldings for which we do not have to move stone 0.
-	while(stone_nr > 0){
+	while(stone_nr > 1){
 		bool setting_stones = true;
 		while(setting_stones)
 		{
@@ -79,7 +83,7 @@ int calculate_foldings(int x, int n_stamps){
 									
 				stone_nr++;																// take the next stone...
 				
-				board[stone_nr] = 0;													// and set it to 0
+				board[stone_nr] = 1;													// and set it to 1
 			}
 		}
 		

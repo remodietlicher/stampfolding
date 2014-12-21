@@ -77,13 +77,14 @@ void local_main(int argc, char *argv[]){
 	n_foldings = 0;
 	n_stamps = atoi(argv[1]);
 	
-	for(int i=0; i<n_stamps; i++){
-		n_foldings_i = calculate_foldings(i, n_stamps);
+	for(int i=0; i<n_stamps-1; i++){
+		n_foldings_i = calculate_foldings(i+1, n_stamps);
 		n_foldings += n_foldings_i;
 		std::cout << "branch " << i << " has: " << n_foldings_i << std::endl;
 	}
 	
-	std::cout << "calculated " << n_foldings << " foldings" << std::endl;
+	std::cout << "calculated " << n_foldings << " foldings for branch level 0" << std::endl;
+	std::cout << "therefore the total number of foldings is: " << n_stamps*n_foldings << std::endl;
 	t.print_time();
 }
 
