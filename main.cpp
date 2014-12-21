@@ -102,8 +102,14 @@ bool test_intersection()
 }
 
 int main(int argc, char *argv[]){
-	local_main(argc, argv);
-	//mpi_main(argc, argv);
+	if(strcmp(argv[0], "./stampfolding")==0 && argc==2){
+		local_main(argc, argv);
+	}
+	else if(strcmp(argv[0], "stampfolding")==0 && argc==2){
+		mpi_main(argc, argv);
+	}
+	else
+		std::cout << "invalid call of 'stampfolding'. Usage: '...stampfolding N_STAMPS'" << std::endl;
 	
 	//std::cout << "outcome of 'test_intersection()': " << test_intersection() << std::endl;
 	
