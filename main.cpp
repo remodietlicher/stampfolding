@@ -22,23 +22,18 @@ void mpi_main(int argc, char *argv[])
 	size = MPI::COMM_WORLD.Get_size();
 	
 	// do not allow this right now
-	if(size < n_stamps){
+	if(size < n_stamps-1){
 		if(rank == 0)
-			std::cout << "not enough processes spawned: (" << size << ", required " << n_stamps << ")." << std::endl;
+			std::cout << "not enough processes spawned: (" << size << ", required " << n_stamps-1 << ")." << std::endl;
 		MPI::Finalize();
 		return;
 	}
-	
-	//for later: only consider the case where size >= n_stamps at first
-	bool* assigned = new bool[n_stamps];
-	for(int i=0; i<n_stamps; i++)
-	assigned[i] = false;
 	  
-	if(rank <= n_stamps)
-	  n_foldings_i = calculate_foldings(x, n_stamps);
+	if(rank <= n_stamps-1)
+	  n_foldings_i = calculate_foldings(rank+1, n_stamps);
 	
-	std::cout << "Process " << rank << " calculated " << n_foldings_i <<
-	" possible Foldings!" << std::endl;
+	//std::cout << "Process " << rank << " calculated " << n_foldings_i <<
+	//" possible Foldings!" << std::endl;
 	
 	
 	if(rank != 0){
@@ -55,15 +50,10 @@ void mpi_main(int argc, char *argv[])
 			std::cout << "getting " << n_foldings_i << " from process " << p << std::endl;
 			n_foldings += n_foldings_i;
 		}
-	}
-	
-	if(rank == 0){
-		std::cout << "Total number of foldings: " << n_foldings << std::endl;
+		std::cout << "Total number of foldings: " << n_stamps*n_foldings << std::endl;
 		t2 = MPI_Wtime();
 		std::cout << "total mpi time: " << t2 - t1 << " s" << std::endl;
-	}
-	
-	
+	}	
 	  
 	MPI::Finalize();
 }
