@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stdlib.h>
 #include "mpi.h"
 
 #include "domino.h"
@@ -6,12 +7,12 @@
 
 #define N_STAMPS 12
 
-void mpi_main()
+void mpi_main(int argc, char *argv[])
 {
 	int n_stamps, x, n_foldings_i, n_foldings;
 	int rank, size;
 	
-	n_stamps = N_STAMPS;
+	n_stamps = atoi(argv[1]);
 	n_foldings = 0;
 	double t1, t2;
 	
@@ -67,14 +68,14 @@ void mpi_main()
 	MPI::Finalize();
 }
 
-void local_main(){
+void local_main(int argc, char *argv[]){
 	timer t;
 	t.start();
 	int n_foldings, n_stamps;
 	
 	int n_foldings_i;
 	n_foldings = 0;
-	n_stamps = N_STAMPS;
+	n_stamps = atoi(argv[1]);
 	
 	for(int i=0; i<n_stamps; i++){
 		n_foldings_i = calculate_foldings(i, n_stamps);
@@ -100,9 +101,9 @@ bool test_intersection()
 	return intersects(a, b, intervals, 0);
 }
 
-int main(){
-	//local_main();
-	mpi_main();
+int main(int argc, char *argv[]){
+	local_main(argc, argv);
+	//mpi_main(argc, argv);
 	
 	//std::cout << "outcome of 'test_intersection()': " << test_intersection() << std::endl;
 	
