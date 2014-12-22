@@ -1,5 +1,20 @@
 #include "domino.h"
 
+//! returns false if the parity rule is not satisfied (i.e. a stone should not be placed)
+bool parity_rule(int n_stamps, int n_encl, int stone_nr){
+	bool out;
+	if(n_stamps%2 == 0)
+		// do not allow odd stones to have an odd number of enclosed free spaces.
+		// i.e. either the stone is even or the n_encl is even.
+		out = ((stone_nr+1)%2 + (n_encl+1)%2) != 0;
+	else
+		// do not allow even stones to have an odd number of enclosed free spaces.
+		// e.g. either the stone is odd, or the n_encl is even.
+		out = (stone_nr%2 + (n_encl+1)%2) != 0;
+	
+	return out;
+}
+
 //! given x1_max, n_stamps and the last job_id
 //! it calculates the next possible level 2 setup.
 //! Example usage:
@@ -104,6 +119,14 @@ int calculate_foldings(int level, int* setup, int n_stamps){
 					  (occupied[board[stone_nr]] || intersects(board[stone_nr], board[stone_nr-1], sealed_intervals, stone_nr%2))){
 					board[stone_nr]++;
 				}
+				// calculate number of enclosed, free places for parity rule.
+				int a, b;
+				int n_encl = 0;
+				make_order(board[stone_nr], board[stone_nr-1], a, b);
+				for(int l=a+1; l<b; l++){
+					n_encl += (((int)occupied[l])+1)%2;			// if not occupied: +1
+				}
+				
 				// if there is no legal position left, we are done
 				if(board[stone_nr] >= n_stamps)
 					setting_stones = false;
@@ -112,9 +135,12 @@ int calculate_foldings(int level, int* setup, int n_stamps){
 					setting_stones = false;
 					n_foldings++;
 				}
-				// else a stone is set, information is updated and we continue setting stones
-				else
+				else if(!parity_rule(n_stamps, n_encl, stone_nr)){
+					board[stone_nr]++;
+				}
+				else // else a stone is set, information is updated and we continue setting stones
 				{
+					
 					occupied[board[stone_nr]] = true;
 
 					sealed_intervals[stone_nr] = std::make_pair(board[stone_nr-1], board[stone_nr]);	// handle sealed intervals

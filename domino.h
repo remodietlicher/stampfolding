@@ -5,6 +5,7 @@
 #include <iostream>
 #include <stdio.h>
 
+bool parity_rule(int n_stamps, int n_encl, int stone_nr);
 bool make_job(int n_stamps, int *job_id, int *x1, int *x2);
 int calculate_foldings(int x, int n_stamps);
 int calculate_foldings(int level, int* setup, int n_stamps);

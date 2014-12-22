@@ -1,0 +1,14 @@
+CC=mpic++
+LIB=
+INCLUDE=
+
+build: stampfolding
+
+stampfolding: main.o
+	$(CC) main.o
+
+main.o: main.cpp
+	$(CC) -c main.cpp
+
+clear:
+	rm -

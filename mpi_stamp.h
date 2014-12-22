@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <vector>
 #include <mpi.h>
+#include <fstream>
 
 #include "domino.h"
 

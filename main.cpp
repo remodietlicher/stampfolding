@@ -123,15 +123,15 @@ bool test_intersection()
 }
 
 int main(int argc, char *argv[]){
-	if(argc == 3 && strcmp(argv[2], "mpi2")==0)
-		mpi_stamp(argc, argv);
+	if(argc == 3 && strcmp(argv[2], "mpi_old")==0)
+		mpi_main(argc, argv);
 	else if(argc == 3 && strcmp(argv[2], "level")==0)
 		local_main_level(argc, argv);
 	else if(strcmp(argv[0], "./stampfolding")==0 && argc==2){
 		local_main(argc, argv);
 	}
 	else if(strcmp(argv[0], "stampfolding")==0 && argc==2){
-		mpi_main(argc, argv);
+		mpi_stamp(argc, argv);
 	}
 	else
 		std::cout << "invalid call of 'stampfolding'. Usage: '...stampfolding N_STAMPS'" << std::endl;
