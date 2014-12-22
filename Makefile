@@ -4,8 +4,8 @@ INCLUDE=
 
 build: stampfolding
 
-stampfolding: main.o domino.o timer.o
-	$(CC) $(LIB) $(INCLUDE) main.o domino.o timer.o -o stampfolding
+stampfolding: main.o domino.o timer.o mpi_stamp.o
+	$(CC) $(LIB) $(INCLUDE) main.o domino.o timer.o mpi_stamp.o -o stampfolding
 
 main.o: main.cpp
 	$(CC) $(LIB) $(INCLUDE) -c main.cpp
@@ -15,6 +15,9 @@ domino.o: domino.cpp
 	
 timer.o: timer.cpp
 	$(CC) $(LIB) $(INCLUDE) -c timer.cpp
+	
+mpi_stamp.o: mpi_stamp.cpp
+	$(CC) $(LIB) $(INCLUDE) -c mpi_stamp.cpp
 
 clear:
 	rm -rf *o stampfolding

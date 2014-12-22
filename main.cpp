@@ -4,6 +4,7 @@
 
 #include "domino.h"
 #include "timer.h"
+#include "mpi_stamp.h"
 
 #define N_STAMPS 12
 
@@ -58,6 +59,35 @@ void mpi_main(int argc, char *argv[])
 	MPI::Finalize();
 }
 
+void local_main_level(int argc, char *argv[]){
+	timer t;
+	t.start();
+	int n_foldings, n_stamps;
+	int level = 2;
+	int setup[2];
+	
+	int n_foldings_i = 0;
+	n_foldings = 0;
+	n_stamps = atoi(argv[1]);
+	
+	int job_id = 0;
+	int x_level_1, x_level_2;
+	
+	bool job_available = make_job(n_stamps, &job_id, &x_level_1, &x_level_2);
+	while(job_available){
+		setup[0] = x_level_1;
+		setup[1] = x_level_2;
+		//printf("calculating folding for setup: [%d, %d] \n", x_level_1, x_level_2);
+		n_foldings_i = calculate_foldings(level, setup, n_stamps);
+		printf("level 2 foldings: %d \n", n_foldings_i);
+		job_available = make_job(n_stamps, &job_id, &x_level_1, &x_level_2);
+	}
+	
+	std::cout << "calculated " << n_foldings << " foldings for branch level 0" << std::endl;
+	std::cout << "therefore the total number of foldings is: " << n_stamps*n_foldings << std::endl;
+	t.print_time();
+}
+
 void local_main(int argc, char *argv[]){
 	timer t;
 	t.start();
@@ -93,7 +123,11 @@ bool test_intersection()
 }
 
 int main(int argc, char *argv[]){
-	if(strcmp(argv[0], "./stampfolding")==0 && argc==2){
+	if(argc == 3 && strcmp(argv[2], "mpi2")==0)
+		mpi_stamp(argc, argv);
+	else if(argc == 3 && strcmp(argv[2], "level")==0)
+		local_main_level(argc, argv);
+	else if(strcmp(argv[0], "./stampfolding")==0 && argc==2){
 		local_main(argc, argv);
 	}
 	else if(strcmp(argv[0], "stampfolding")==0 && argc==2){
@@ -101,8 +135,6 @@ int main(int argc, char *argv[]){
 	}
 	else
 		std::cout << "invalid call of 'stampfolding'. Usage: '...stampfolding N_STAMPS'" << std::endl;
-	
-	//std::cout << "outcome of 'test_intersection()': " << test_intersection() << std::endl;
 	
 	return 0;
 }
