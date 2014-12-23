@@ -6,8 +6,6 @@
 #include "timer.h"
 #include "mpi_stamp.h"
 
-#define N_STAMPS 12
-
 void mpi_main(int argc, char *argv[])
 {
 	int n_stamps, x, n_foldings_i, n_foldings;
@@ -106,20 +104,6 @@ void local_main(int argc, char *argv[]){
 	std::cout << "calculated " << n_foldings << " foldings for branch level 0" << std::endl;
 	std::cout << "therefore the total number of foldings is: " << n_stamps*n_foldings << std::endl;
 	t.print_time();
-}
-
-bool test_intersection()
-{
-	std::vector<std::pair<int, int> > intervals(3);
-	
-	intervals[0] = std::make_pair(0, 5);
-	intervals[1] = std::make_pair(2, 3);
-	intervals[2] = std::make_pair(7, 10);
-	
-	int a = 6;
-	int b = 4;
-	
-	return intersects(a, b, intervals, 0);
 }
 
 int main(int argc, char *argv[]){

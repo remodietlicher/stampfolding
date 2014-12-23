@@ -4,6 +4,7 @@
 #include <utility>
 #include <iostream>
 #include <stdio.h>
+#include <string>
 
 bool parity_rule(int n_stamps, int n_encl, int stone_nr);
 bool make_job(int n_stamps, int *job_id, int *x1, int *x2);
